@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+"email" must be a valid email"email" must be a valid email<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
 <body>
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="index.html">DataStore</a>
+      <a class="brand" href="index.html">CoreLink Internet <span class="brand-accent">Link</span></a>
       <nav>
         <a href="index.html">Home</a>
         <a href="products.html">Packages</a>
@@ -29,8 +29,11 @@
         <label for="contact-number">Contact Number</label>
         <input id="contact-number" type="text" placeholder="Enter your contact phone number" required />
 
+        <label for="customer-email">Email Address</label>
+        <input id="customer-email" type="email" placeholder="Enter your email address" required />
+
         <button id="checkout-button" type="submit">Proceed to Payment</button>
-        <p class="payment-note">You will be redirected to Paystack to confirm mobile money payment.</p>
+        <p class="payment-note">You will be redirected to Paystack to confirm payment.</p>
       </form>
       <p id="checkout-error" class="status-result"></p>
     </section>

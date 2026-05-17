@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | DataStore</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">CoreLink Internet <span class="brand-accent">Link</span></a>
+      <nav>
+        <a href="admin-dashboard.html" class="active">Dashboard</a>
+        <button id="logout-button" class="logout-button">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <section>
+      <h1>Order Management Dashboard</h1>
+      <p>View and manage all orders placed on the platform.</p>
+    </section>
+
+    <section class="dashboard-controls card">
+      <div class="controls-row">
+        <input id="filter-search" type="text" placeholder="Search by Order ID or Beneficiary..." />
+        <select id="filter-status">
+          <option value="">All Statuses</option>
+          <option value="Paid">Paid</option>
+          <option value="Processing">Processing</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+      <p id="order-count" class="payment-note">Total orders: 0</p>
+    </section>
+
+    <section class="dashboard-table card">
+      <table id="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Package</th>
+            <th>Provider</th>
+            <th>Amount</th>
+            <th>Beneficiary</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <!-- Orders injected by JavaScript -->
+        </tbody>
+      </table>
+      <p id="no-orders" class="payment-note">No orders found.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Admin Dashboard. All transactions and order statuses managed here.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

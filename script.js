@@ -267,8 +267,284 @@ const packageCountLabel = document.getElementById('package-count');
 const providerButtons = document.querySelectorAll('.provider-button');
 let activeProvider = 'MTN';
 
+const API_BASE = '';
+const PAYSTACK_PUBLIC_KEY = 'pk_test_d16966f441de107af2c895515e8a1d92a666103f';
+const PAYSTACK_CURRENCY = 'GHS';
+const STORAGE_KEY = 'transactions';
+
 function formatAmount(value) {
-  return `₦${value.toLocaleString()}`;
+  const symbol = PAYSTACK_CURRENCY === 'GHS' ? '₵' : PAYSTACK_CURRENCY === 'NGN' ? '₦' : PAYSTACK_CURRENCY;
+  return `${symbol}${value.toLocaleString()}`;
+}
+
+async function isAdminAuthenticated() {
+  try {
+    const response = await fetch(`${API_BASE}/api/admin/status`, {
+      credentials: 'include',
+    });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+
+async function checkAdminAccess() {
+  const onDashboard = window.location.pathname.includes('admin-dashboard');
+  const onLoginPage = window.location.pathname.includes('admin-login');
+
+  if (!onDashboard && !onLoginPage) return;
+
+  const authenticated = await isAdminAuthenticated();
+  if (onDashboard && !authenticated) {
+    window.location.href = 'admin-login.html';
+  }
+  if (onLoginPage && authenticated) {
+    window.location.href = 'admin-dashboard.html';
+  }
+}
+
+function bindAdminLogin() {
+  const form = document.getElementById('admin-login-form');
+  const error = document.getElementById('login-error');
+  if (!form) return;
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const password = document.getElementById('admin-password')?.value.trim();
+
+    try {
+      const response = await fetch(`${API_BASE}/api/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ password }),
+      });
+
+      if (response.ok) {
+        window.location.href = 'admin-dashboard.html';
+        return;
+      }
+    } catch (error) {
+      console.error('Admin login failed', error);
+    }
+
+    if (error) {
+      error.textContent = 'Invalid password. Please try again.';
+      error.style.display = 'block';
+    }
+  });
+}
+
+function bindAdminLogout() {
+  const logoutBtn = document.getElementById('logout-button');
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener('click', async () => {
+    try {
+      await fetch(`${API_BASE}/api/admin/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.warn('Logout request failed', error);
+    }
+    window.location.href = 'admin-login.html';
+  });
+}
+
+function localTransactions() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+}
+
+function saveLocalTransactions(transactions) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+}
+
+function saveLocalTransaction(transaction) {
+  const transactions = localTransactions();
+  transactions.push(transaction);
+  saveLocalTransactions(transactions);
+  return transaction;
+}
+
+async function backendSaveTransaction(transaction) {
+  const response = await fetch(`${API_BASE}/api/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(transaction),
+  });
+  if (!response.ok) throw new Error('Backend save failed');
+  return response.json();
+}
+
+async function saveTransaction(transaction) {
+  try {
+    return await backendSaveTransaction(transaction);
+  } catch (error) {
+    console.warn('Backend save failed, using local storage fallback', error);
+    return saveLocalTransaction(transaction);
+  }
+}
+
+async function backendGetAllTransactions() {
+  const response = await fetch(`${API_BASE}/api/admin/orders`, {
+    credentials: 'include',
+  });
+  if (!response.ok) throw new Error('Failed to fetch backend orders');
+  return response.json();
+}
+
+async function getAllTransactions() {
+  try {
+    return await backendGetAllTransactions();
+  } catch (error) {
+    return localTransactions();
+  }
+}
+
+async function backendGetTransaction(orderId) {
+  const response = await fetch(`${API_BASE}/api/orders/${encodeURIComponent(orderId)}`);
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error('Failed to fetch backend order');
+  return response.json();
+}
+
+async function getTransaction(orderId) {
+  try {
+    return await backendGetTransaction(orderId);
+  } catch (error) {
+    return localTransactions().find(tx => tx.orderId === orderId);
+  }
+}
+
+async function backendUpdateTransactionStatus(orderId, newStatus) {
+  const response = await fetch(`${API_BASE}/api/admin/orders/${encodeURIComponent(orderId)}/status`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: newStatus }),
+  });
+  if (!response.ok) throw new Error('Failed to update backend order status');
+  return response.json();
+}
+
+async function updateTransactionStatus(orderId, newStatus) {
+  try {
+    await backendUpdateTransactionStatus(orderId, newStatus);
+    return true;
+  } catch (error) {
+    const transactions = localTransactions();
+    const tx = transactions.find(t => t.orderId === orderId);
+    if (tx) {
+      tx.status = newStatus;
+      saveLocalTransactions(transactions);
+      return true;
+    }
+    return false;
+  }
+}
+
+async function renderOrdersTable(transactions) {
+  if (!transactions) {
+    transactions = await getAllTransactions();
+  }
+
+  const tbody = document.getElementById('orders-tbody');
+  const noOrders = document.getElementById('no-orders');
+  const orderCount = document.getElementById('order-count');
+  
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  
+  if (!transactions || transactions.length === 0) {
+    if (noOrders) noOrders.style.display = 'block';
+    if (orderCount) orderCount.textContent = 'Total orders: 0';
+    return;
+  }
+
+  if (noOrders) noOrders.style.display = 'none';
+  if (orderCount) orderCount.textContent = `Total orders: ${transactions.length}`;
+
+  transactions.forEach(tx => {
+    const row = document.createElement('tr');
+    const statusClass = tx.status === 'Delivered' ? 'status-delivered' : 
+                       tx.status === 'Processing' ? 'status-processing' : 
+                       tx.status === 'Paid' ? 'status-paid' : 'status-cancelled';
+    
+    row.innerHTML = `
+      <td>${tx.orderId}</td>
+      <td>${tx.packageName}</td>
+      <td>${tx.provider || 'N/A'}</td>
+      <td>${formatAmount(tx.amount)}</td>
+      <td>${tx.beneficiaryNumber || 'N/A'}</td>
+      <td>${tx.contactNumber || 'N/A'}</td>
+      <td><span class="status-badge ${statusClass}">${tx.status}</span></td>
+      <td>${new Date(tx.createdAt).toLocaleDateString()}</td>
+      <td>
+        <select class="status-select" data-order-id="${tx.orderId}">
+          <option value="${tx.status}" selected>${tx.status}</option>
+          <option value="Processing">Processing</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  bindStatusChangeHandlers();
+}
+
+function bindStatusChangeHandlers() {
+  const selects = document.querySelectorAll('.status-select');
+  selects.forEach(select => {
+    select.addEventListener('change', async event => {
+      const orderId = event.target.dataset.orderId;
+      const newStatus = event.target.value;
+      
+      if (await updateTransactionStatus(orderId, newStatus)) {
+        await renderOrdersTable();
+      }
+    });
+  });
+}
+
+function bindDashboardFilters() {
+  const searchInput = document.getElementById('filter-search');
+  const statusSelect = document.getElementById('filter-status');
+  
+  if (!searchInput || !statusSelect) return;
+
+  const applyFilters = async () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const statusFilter = statusSelect.value;
+    const allTransactions = await getAllTransactions();
+
+    const filtered = allTransactions.filter(tx => {
+      const matchesSearch = !searchTerm || 
+        tx.orderId.toLowerCase().includes(searchTerm) ||
+        (tx.beneficiaryNumber && tx.beneficiaryNumber.includes(searchTerm));
+      const matchesStatus = !statusFilter || tx.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+
+    await renderOrdersTable(filtered);
+  };
+
+  searchInput.addEventListener('input', applyFilters);
+  statusSelect.addEventListener('change', applyFilters);
+}
+
+async function initAdminDashboard() {
+  await checkAdminAccess();
+  bindAdminLogin();
+  bindAdminLogout();
+  
+  if (window.location.pathname.includes('admin-dashboard')) {
+    renderOrdersTable();
+    bindDashboardFilters();
+  }
 }
 
 function createPackageCard(pkg) {
@@ -315,17 +591,6 @@ function setupProviderButtons() {
       if (provider) setActiveProvider(provider);
     });
   });
-}
-
-function saveTransaction(transaction) {
-  const existing = JSON.parse(localStorage.getItem('transactions') || '[]');
-  existing.push(transaction);
-  localStorage.setItem('transactions', JSON.stringify(existing));
-}
-
-function getTransaction(orderId) {
-  const existing = JSON.parse(localStorage.getItem('transactions') || '[]');
-  return existing.find(tx => tx.orderId === orderId);
 }
 
 function generateOrderId(packageId) {
@@ -377,6 +642,7 @@ function bindCheckoutForm() {
     const pkg = getPackageById(packageId);
     const beneficiary = document.getElementById('beneficiary-number')?.value.trim();
     const contact = document.getElementById('contact-number')?.value.trim();
+    const email = document.getElementById('customer-email')?.value.trim();
 
     if (!pkg) {
       alert('No package selected. Please choose a package first.');
@@ -385,6 +651,7 @@ function bindCheckoutForm() {
 
     const validBeneficiary = beneficiary && /^[0-9]{8,15}$/.test(beneficiary.replace(/\D/g, ''));
     const validContact = contact && /^[0-9]{8,15}$/.test(contact.replace(/\D/g, ''));
+    const validEmail = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     if (!validBeneficiary) {
       alert('Please enter a valid beneficiary number.');
@@ -394,24 +661,28 @@ function bindCheckoutForm() {
       alert('Please enter a valid contact number.');
       return;
     }
+    if (!validEmail) {
+      alert('Please enter a valid email address.');
+      return;
+    }
 
     if (typeof PaystackPop === 'undefined') {
       alert('Paystack script is not loaded. Please open this page from a web server or check your connection.');
       return;
     }
 
-    handlePaystackPayment(pkg, contact, beneficiary);
+    handlePaystackPayment(pkg, contact, beneficiary, email);
   });
 }
 
-function handlePaystackPayment(pkg, phone, beneficiaryNumber) {
-  const email = `${phone.replace(/\D/g, '')}@mobilemoney.local`;
+function handlePaystackPayment(pkg, phone, beneficiaryNumber, email) {
   const handler = PaystackPop.setup({
-    key: 'pk_test_xxxxxxxxxxxxxxxxxxxxx',
+    key: PAYSTACK_PUBLIC_KEY,
     email,
     amount: pkg.price * 100,
-    currency: 'NGN',
-    channels: ['mobile_money'],
+    currency: PAYSTACK_CURRENCY,
+    // Allow card and mobile money so test transactions work if mobile money is not enabled in this Paystack account.
+    channels: ['card', 'mobile_money'],
     ref: generateOrderId(pkg.id),
     metadata: {
       custom_fields: [
@@ -432,8 +703,13 @@ function handlePaystackPayment(pkg, phone, beneficiaryNumber) {
         status: 'Paid',
         createdAt: new Date().toISOString(),
       };
-      saveTransaction(transaction);
-      alert(`Payment complete! Your order ID is ${orderId}. Use it to track status.`);
+      saveTransaction(transaction)
+        .then(() => {
+          alert(`Payment complete! Your order ID is ${orderId}. Use it to track status.`);
+        })
+        .catch(() => {
+          alert(`Payment complete! Your order ID is ${orderId}. It was saved locally after backend failure.`);
+        });
     },
     onClose: function() {
       alert('Payment window closed. Your order was not completed.');
@@ -460,13 +736,13 @@ function bindStatusCheck() {
   const input = document.getElementById('track-id');
   const result = document.getElementById('status-result');
 
-  button?.addEventListener('click', () => {
+  button?.addEventListener('click', async () => {
     const orderId = input?.value.trim();
     if (!orderId) {
       result.textContent = 'Please enter an order ID.';
       return;
     }
-    const transaction = getTransaction(orderId);
+    const transaction = await getTransaction(orderId);
     if (!transaction) {
       result.textContent = `No transaction found for ${orderId}. Check your order ID and try again.`;
       return;
@@ -502,6 +778,7 @@ function init() {
   populateCheckoutPage();
   bindStatusCheck();
   initPaystackScript();
+  initAdminDashboard();
 }
 
 init();

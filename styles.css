@@ -45,6 +45,57 @@ body {
   font-size: 1.25rem;
   color: var(--primary);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.brand:hover {
+  transform: translateY(-2px);
+  
+}
+
+
+.brand-accent::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #14b8a6, #06d6a0);
+  transition: width 0.4s ease;
+}
+
+.brand:hover .brand-accent::before {
+  width: 100%;
+}
+
+.brand-accent::after {
+  content: '';
+  position: absolute;
+  inset: -6px -4px;
+  border: 2px solid #14b8a6;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.brand:hover .brand-accent::after {
+  opacity: 0.1;
+  animation: brandPulse 0.6s ease;
+}
+
+@keyframes brandPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
 }
 
 nav a {
@@ -220,13 +271,36 @@ button:hover {
 }
 
 input[type="text"],
-input[type="email"] {
+input[type="email"],
+input[type="password"] {
   width: 100%;
   margin: 0.75rem 0 1rem;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--border);
+  padding: 1rem 1.1rem;
+  border: 2px solid var(--border);
   border-radius: 14px;
   background: #fafbff;
+  font: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: #9ca3af;
+}
+
+input[type="password"] {
+  letter-spacing: 0.15em;
 }
 
 .status-result {
@@ -261,6 +335,137 @@ input[type="email"] {
   width: 100%;
 }
 
+.login-card {
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+.login-card h1 {
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+}
+
+.login-card p {
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+}
+
+.login-card .checkout-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dashboard-controls {
+  margin-bottom: 1.5rem;
+}
+
+.controls-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+#filter-search,
+#filter-status {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fafbff;
+  font: inherit;
+}
+
+#filter-status {
+  width: 160px;
+}
+
+.dashboard-table {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f9fafb;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+th {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+tr:hover {
+  background: #f9fafb;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.status-paid {
+  background: #3b82f6;
+}
+
+.status-processing {
+  background: #f59e0b;
+}
+
+.status-delivered {
+  background: #10b981;
+}
+
+.status-cancelled {
+  background: #ef4444;
+}
+
+.status-select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.logout-button {
+  background: #ef4444;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #dc2626;
+}
+
+#login-error,
+#checkout-error {
+  display: none;
+}
+
 footer.site-footer {
   padding: 1.5rem 0 2rem;
   color: var(--muted);
@@ -281,5 +486,22 @@ footer.site-footer {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
+  }
+
+  .controls-row {
+    grid-template-columns: 1fr;
+  }
+
+  #filter-status {
+    width: 100%;
+  }
+
+  .dashboard-table {
+    font-size: 0.85rem;
+  }
+
+  th,
+  td {
+    padding: 0.5rem 0.25rem;
   }
 }

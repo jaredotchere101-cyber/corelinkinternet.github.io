@@ -1,0 +1,16 @@
+{
+  "name": "corelink-internet-site",
+  "version": "1.0.0",
+  "description": "CoreLink Internet data package site with backend order persistence",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.4",
+    "express-session": "^1.17.3",
+    "twilio": "^4.17.0",
+    "sqlite3": "^5.1.6"
+  }
+}

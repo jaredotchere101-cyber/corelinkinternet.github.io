@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Track Transaction Status</title>
+  <title>Admin Login | DataStore</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,29 +12,27 @@
       <a class="brand" href="index.html">CoreLink Internet <span class="brand-accent">Link</span></a>
       <nav>
         <a href="index.html">Home</a>
-        <a href="products.html">Packages</a>
-        <a href="status.html" class="active">Track Order</a>
       </nav>
     </div>
   </header>
 
   <main class="container main-content">
-    <section>
-      <h1>Transaction Status</h1>
-      <p>Enter the order ID from your purchase confirmation to view the current status.</p>
-    </section>
+    <section class="login-card card">
+      <h1>Admin Login</h1>
+      <p>Enter your admin credentials to access the order dashboard.</p>
+      <form id="admin-login-form" class="checkout-form">
+        <label for="admin-password">Admin Password</label>
+        <input id="admin-password" type="password" placeholder="Enter admin password" required />
 
-    <section class="card status-card">
-      <label for="track-id">Order ID</label>
-      <input id="track-id" type="text" placeholder="e.g. ORDER-1234" />
-      <button id="check-status">Check Status</button>
-      <div id="status-result" class="status-result"></div>
+        <button type="submit">Login</button>
+        <p id="login-error" class="status-result"></p>
+      </form>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>Saved status history is stored locally in your browser.</p>
+      <p>Admin access only. Secure login required.</p>
     </div>
   </footer>
 

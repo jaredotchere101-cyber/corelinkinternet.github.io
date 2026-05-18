@@ -1,0 +1,639 @@
+:root {
+    --yellow: #FFD700;
+    --cream: #FDFBF0;
+    --white: #FFFFFF;
+    --blue-black: #0A0E1A;
+    --black-ash: #1C1C1C;
+    --text-muted: #A8B0C2;
+    --glass: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --success: #27AE60;
+    --error: #EB5757;
+    --transition: 0.25s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: radial-gradient(circle at top left, rgba(255, 215, 0, 0.08), transparent 28%),
+                linear-gradient(180deg, #0A0E1A 0%, #070B15 100%);
+    color: var(--white);
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.08), transparent 20%),
+                radial-gradient(circle at bottom left, rgba(255, 215, 0, 0.06), transparent 18%);
+    pointer-events: none;
+}
+
+nav {
+    position: fixed;
+    inset: 0 auto auto 0;
+    width: 100%;
+    padding: 1.2rem 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 14, 26, 0.78);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--yellow), #D4A500);
+    clip-path: polygon(50% 0%, 100% 32%, 82% 100%, 18% 100%, 0% 32%);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color var(--transition);
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+    color: var(--yellow);
+}
+
+.btn-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: var(--white);
+    font-weight: 600;
+}
+
+main {
+    padding-top: 100px;
+}
+
+.hero {
+    min-height: calc(100vh - 100px);
+    padding: 5rem 10% 6rem;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.08), transparent 24%),
+                radial-gradient(circle at 20% 90%, rgba(255, 215, 0, 0.06), transparent 18%);
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+}
+/* Container for the logo images */
+.tab-logo-container {
+    width: 65px;
+    height: 65px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 18px;
+    flex-shrink: 0;
+    overflow: hidden; /* Clips the image to the border radius */
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Specific styling for the brand images */
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This makes the logo fill the square container like an app icon */
+    transition: transform 0.4s ease;
+}
+
+/* Hover Effects */
+.tab-card:hover .tab-logo-container {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.tab-card:hover .brand-logo img {
+    transform: scale(1.1);
+}
+
+/* MTN Specific Adjustment (since background is already yellow) */
+.mtn-tab .tab-logo-container {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Typography fix for better spacing with larger logos */
+.tab-info h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+    letter-spacing: -0.02em;
+}
+.hero h1 {
+    font-size: clamp(3rem, 5vw, 4.8rem);
+    line-height: 1.02;
+    font-weight: 800;
+    margin-bottom: 1.4rem;
+}
+
+.hero h1 span {
+    color: var(--yellow);
+}
+
+.hero p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+}
+/* --- Purchase Tabs Section --- */
+.purchase-tabs-section {
+    padding: 80px 10%;
+    text-align: center;
+    background-color: antiquewhite;
+}
+
+.purchase-intro {
+    margin-bottom: 50px;
+}
+
+.purchase-intro h2 {
+    font-size: 2.5rem;
+    color: var(--blue-black);
+    margin: 15px 0;
+}
+
+/* --- Tabs Grid Layout --- */
+.tabs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- Base Tab Styling --- */
+.tab-card {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.tab-card .tab-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.tab-info {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.tab-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.tab-info p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.tab-card .arrow {
+    transition: transform 0.3s ease;
+}
+
+/* --- Specific Tab Backgrounds --- */
+
+/* Airtime - Blue Black */
+.airtime-tab {
+    background-color: var(--blue-black);
+    color: var(--white);
+}
+
+/* MTN - Yellow */
+.mtn-tab {
+    background-color: #FFCC00; /* Official MTN Yellow */
+    color: #000;
+}
+
+/* Telecel - Red */
+.telecel-tab {
+    background-color: #E60000; /* Official Telecel Red */
+    color: var(--white);
+}
+
+/* AT - Red & Blue Gradient */
+.at-tab {
+    background: linear-gradient(135deg, #ED1C24 0%, #0054A6 100%);
+    color: var(--white);
+}
+
+/* --- Hover Effects --- */
+.tab-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.tab-card:hover .arrow {
+    transform: translateX(5px);
+}
+
+.tab-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+.tab-card:hover::after {
+    left: 100%;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .purchase-tabs-section { padding: 60px 5%; }
+    .tabs-grid { grid-template-columns: 1fr; }
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    background: var(--yellow);
+    color: var(--blue-black);
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(255, 215, 0, 0.22);
+}
+
+.section-title {
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    color: var(--yellow);
+    letter-spacing: 0.2em;
+    font-size: 0.8rem;
+}
+
+.purchase-section {
+    padding: 4rem 10% 3rem;
+}
+
+.purchase-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+.glass-panel,
+.purchase-card,
+.support-card,
+.feature-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    border-radius: 28px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    border-radius: 24px;
+    background: rgba(24, 23, 22, 0.968);
+    color: var(--yellow);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+}
+.dog{
+    color: black;
+}
+.purchase-copy {
+    padding: 3rem;
+    color: var(--white);
+}
+
+.purchase-copy h2 {
+    font-size: clamp(2rem, 3vw, 3rem);
+    margin-bottom: 1.2rem;
+}
+
+.purchase-copy p {
+    color: var(--text-muted);
+    line-height: 1.75;
+}
+
+.glass-form {
+    padding: 2.5rem;
+}
+
+.glass-form h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    color: var(--white);
+}
+
+.form-group {
+    display: grid;
+    gap: 0.7rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 1rem 1.15rem;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--white);
+    font-size: 1rem;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgba(255, 215, 0, 0.85);
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.12);
+}
+
+.purchase-card {
+    padding: 2.5rem;
+}
+
+.purchase-card button {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+.features-section {
+    padding: 0 10% 4rem;
+   
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.feature-card {
+    padding: 2rem;
+}
+
+.feature-card i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(255, 215, 0, 0.12);
+    color: var(--yellow);
+}
+
+.feature-card h3 {
+    margin: 1.25rem 0 0.75rem;
+    font-size: 1.15rem;
+}
+
+.feature-card p {
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.contact-section {
+    padding: 0 10% 5rem;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.support-card {
+    padding: 2rem;
+}
+
+.support-card h4 {
+    margin-bottom: 0.85rem;
+}
+
+.support-card p {
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.notification {
+    position: fixed;
+    right: 1.5rem;
+    top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 18px;
+    color: var(--white);
+    font-weight: 600;
+    display: none;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
+    z-index: 1500;
+}
+
+.notification.show {
+    display: block;
+    animation: slideIn 0.35s ease forwards;
+}
+
+.notification.success {
+    background: rgba(39, 174, 96, 0.95);
+}
+
+.notification.error {
+    background: rgba(235, 87, 87, 0.95);
+}
+
+.bundle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.bundle-square {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--white);
+}
+
+.bundle-square span {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-top: -2px;
+}
+
+.bundle-square:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--yellow);
+}
+
+/* Active State */
+.bundle-square.active {
+    background: var(--yellow);
+    color: var(--blue-black);
+    border-color: var(--yellow);
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+}
+
+.bundle-square.active span {
+    opacity: 1;
+    color: var(--blue-black);
+    font-weight: 700;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 992px) {
+    nav {
+        padding: 1rem 6%;
+    }
+
+    .purchase-grid,
+    .contact-grid,
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .hero {
+        padding: 4.5rem 6rem 4rem;
+    }
+
+    .hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .logo {
+        gap: 0.6rem;
+    }
+}

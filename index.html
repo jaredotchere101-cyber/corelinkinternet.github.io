@@ -1,55 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DataStore | Buy Internet Data Packages</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreLink | Premium Data & Internet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <a class="brand" href="index.html">CoreLink Internet <span class="brand-accent">Link</span></a>
-      <nav>
-        <a href="index.html" class="active">Home</a>
-        <a href="products.html">Packages</a>
-        <a href="status.html">Track Order</a>
-      </nav>
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            CoreLink
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#buy">Buy Data</a></li>
+            <li><a href="#support">Support</a></li>
+            <li><a href="#" class="btn-nav">Admin Login</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p class="section-title">CoreLink Premium Preview</p>
+                <h1>Premium Data for <span>Digital Pioneers.</span></h1>
+                <p>Reliable high-speed internet bundles for MTN, Telecel, and AT. Instant delivery, zero stress, and secure checkout for modern businesses and professionals.</p>
+                <a href="#buy" class="btn-primary">Buy Data Now</a>
+            </div>
+        </section>
+
+        <section id="buy" class="purchase-tabs-section">
+    <div class="purchase-intro">
+        <span class="status-badge">Fast Delivery</span>
+        <h2>Select Your Package</h2>
+        <p>Choose a category below to proceed to our high-speed checkout.</p>
     </div>
-  </header>
 
-  <main class="container main-content">
-    <section class="hero-card card">
-      <h1>Buy and Track Internet Data Packages</h1>
-      <p>Securely purchase data bundles with Paystack, then track your order status in real time. Available packages cover daily, weekly, and monthly needs.</p>
-      <div class="hero-actions">
-        <a class="button-link" href="products.html">View Packages</a>
-        <a class="button-link secondary" href="status.html">Track Transaction</a>
-      </div>
-    </section>
+   <div class="tabs-grid">
+    <!-- Airtime Tab (Keeping a generic premium icon) -->
+    <a href="buy-airtime.html" class="tab-card airtime-tab">
+        <div class="tab-logo-container">
+            <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="6" width="18" height="13" rx="3"/>
+                <path d="M3 10H21M16 14H18"/>
+            </svg>
+        </div>
+        <div class="tab-info">
+            <h3>Buy Airtime</h3>
+            <p>Instant Top-up</p>
+        </div>
+        <i data-lucide="chevron-right" class="arrow"></i>
+    </a>
 
-    <section class="grid cards">
-      <article class="card">
-        <h2>Fast Checkout</h2>
-        <p>Pay with Paystack using a reliable, secure payment flow. No backend setup is required for testing.</p>
-      </article>
+    <!-- MTN Tab -->
+    <a href="mtn-bundles.html" class="tab-card mtn-tab">
+        <div class="tab-logo-container brand-logo">
+            <img src="mtn-oip.png" alt="MTN">
+        </div>
+        <div class="tab-info">
+            <h3>MTN Bundles</h3>
+            <p>4G/5G Turbo Data</p>
+        </div>
+        <i data-lucide="chevron-right" class="arrow"></i>
+    </a>
 
-      <article class="card">
-        <h2>Order Tracking</h2>
-        <p>Each purchase creates an order ID. Use it on the Track Order page to verify status and payment completion.</p>
-      </article>
+    <!-- Telecel Tab -->
+    <a href="telecel-bundles.html" class="tab-card telecel-tab">
+        <div class="tab-logo-container brand-logo">
+            <img src="telecel-oip1.png" alt="Telecel">
+        </div>
+        <div class="tab-info">
+            <h3>Telecel Bundles</h3>
+            <p>Reliable Connectivity</p>
+        </div>
+        <i data-lucide="chevron-right" class="arrow"></i>
+    </a>
 
-      <article class="card">
-        <h2>Responsive Design</h2>
-        <p>The site works on desktop and mobile screens, letting customers buy data packages from any device.</p>
-      </article>
-    </section>
-  </main>
+    <!-- AT Tab -->
+    <a href="at-bundles.html" class="tab-card at-tab">
+        <div class="tab-logo-container brand-logo">
+            <img src="at-oip2.png" alt="AT">
+        </div>
+        <div class="tab-info">
+            <h3>AT Bundles</h3>
+            <p>Unified Data Speed</p>
+        </div>
+        <i data-lucide="chevron-right" class="arrow"></i>
+    </a>
+</div>
+</section>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>Demo website for internet data package purchase and tracking with Paystack.</p>
-    </div>
-  </footer>
+        <section class="features-section">
+            <div class="section-title">Experience</div>
+            <div class="features-grid">
+                <article class="feature-card glass-panel">
+                    <i data-lucide="zap"></i>
+                    <h3>Delivery</h3>
+                    <p>Data is credited to your line after payment verification and order prcessing.</p>
+                </article>
+                <article class="feature-card glass-panel">
+                    <i data-lucide="wifi"></i>
+                    <h3>Network Coverage</h3>
+                    <p>MTN, Telecel, and AT packages with optimized pricing and wide-area reliability.</p>
+                </article>
+                <article class="feature-card glass-panel">
+                    <i data-lucide="headphones"></i>
+                    <h3>24/7 Support</h3>
+                    <p>Our team is always online to assist with your connectivity needs.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="contact-section" id="support">
+            <p class="section-title">Contact Section</p>
+            <h2>Need assistance? We’re ready to help.</h2>
+            <div class="contact-grid">
+                <article class="support-card glass-panel">
+                     <i data-lucide="phone"></i>
+                    <h4>Live Support</h4>
+                    <p>Chat with our team for real-time help, bundle changes, or payment questions.</p>
+                </article>
+                <article class="support-card glass-panel">
+                    <i data-lucide="message-square"></i>
+                    <h4>Secure Checkout</h4>
+                    <p>Fast, simple payment flow with transparent confirmation and instant top-up.</p>
+                </article>
+                
+            </div>
+        </section>
+    </main>
+
+    <div id="success-toast" class="notification success">Payment successful! Redirecting to secure checkout…</div>
+    <div id="error-toast" class="notification error">Please enter a valid phone number.</div>
+
+    <script>
+        lucide.createIcons();
+
+        function handlePayment() {
+            const phone = document.getElementById('phone').value.trim();
+            const successToast = document.getElementById('success-toast');
+            const errorToast = document.getElementById('error-toast');
+
+            if (phone.length < 10 || !/^[0-9 ]+$/.test(phone)) {
+                errorToast.classList.add('show');
+                setTimeout(() => errorToast.classList.remove('show'), 3200);
+                return;
+            }
+
+            successToast.classList.add('show');
+            setTimeout(() => {
+                successToast.classList.remove('show');
+                alert('Redirecting to Paystack Secure Checkout...');
+            }, 2200);
+        }
+    </script>
 </body>
 </html>

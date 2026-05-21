@@ -7,68 +7,114 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@0.344.0"></script>
+    
+    <style>
+        /* --- Mobile Responsiveness Fixes --- */
+        .purchase-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2.5rem;
+            align-items: start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .bundle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 10px;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        /* --- Telecel Theme (Red) Overrides --- */
+        .telecel-page .status-badge {
+            background: #E60000;
+            color: white;
+        }
+
+        .telecel-page .bundle-square.active {
+            background: #E60000 !important;
+            border-color: #E60000 !important;
+            color: white !important;
+            box-shadow: 0 10px 20px rgba(230, 0, 0, 0.2);
+        }
+
+        .telecel-page .bundle-square.active span { color: white !important; }
+        
+        .telecel-page .btn-primary { background: #E60000; color: white; }
+        .telecel-page .btn-primary:hover { background: #cc0000; }
+
+        .telecel-page .transfer-path { color: #E60000; }
+
+        @media (max-width: 768px) {
+            .purchase-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0 5%;
+            }
+            .purchase-card {
+                width: 100%;
+                max-width: 100%;
+                padding: 1.5rem !important;
+            }
+            .purchase-copy {
+                text-align: center;
+                padding: 1rem 0;
+            }
+            .data-transfer-visual {
+                justify-content: center;
+                margin: 2rem auto;
+            }
+        }
+
+        .purchase-card.glass-form h3, 
+        .purchase-card.glass-form label,
+        .purchase-card.glass-form .price-label {
+            color: #0A0E1A;
+        }
+    </style>
 </head>
-<body class="telecel-page"> <!-- Class added here to trigger Red theme -->
+<body class="telecel-page">
     <nav>
         <div class="logo">
-            <div class="logo-icon"></div>
+            <div class="logo-icon" style="background: linear-gradient(135deg, #E60000, #990000);"></div>
             CoreLink Internet
         </div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="index.html#buy">Buy Data</a></li>
             <li><a href="index.html#support">Support</a></li>
-           
+            <li><a href="admin-login.html" class="btn-nav">Admin Login</a></li>
         </ul>
     </nav>
 
-    <main>
+    <main style="padding-top: 100px;">
         <section class="purchase-section">
             <div class="purchase-grid">
+                
                 <div class="purchase-copy">
-                    <!-- Changed text to Telecel -->
                     <span class="status-badge">Telecel Ghana</span>
                     <h2>Select your Telecel Bundle</h2>
                     <p>Get high-speed data credited directly to your Telecel number within minutes.</p>
-                <div class="data-transfer-visual">
-    <!-- Source: Tower -->
-    <div class="visual-node">
-        <i data-lucide="signal"></i>
-    </div>
+                    
+                    <div class="data-transfer-visual">
+                        <div class="visual-node"><i data-lucide="signal"></i></div>
+                        <div class="transfer-path">
+                            <svg width="140" height="60" viewBox="0 0 140 60" fill="none">
+                                <path d="M10 50C10 50 40 10 70 10C100 10 130 50 130 50" stroke="rgba(0,0,0,0.05)" stroke-width="2" stroke-linecap="round" stroke-dasharray="0.1 8" />
+                                <circle r="3" fill="currentColor"><animateMotion dur="2s" repeatCount="indefinite" path="M10 50C10 50 40 10 70 10C100 10 130 50 130 50" /></circle>
+                                <circle r="3" fill="currentColor" opacity="0.6"><animateMotion dur="2s" begin="0.6s" repeatCount="indefinite" path="M10 50C10 50 40 10 70 10C100 10 130 50 130 50" /></circle>
+                            </svg>
+                        </div>
+                        <div class="visual-node"><i data-lucide="smartphone"></i></div>
+                    </div>
 
-    <!-- The Transfer Path (Arc of Dots) -->
-    <div class="transfer-path">
-        <svg width="140" height="60" viewBox="0 0 140 60" fill="none">
-            <path id="arc-path" d="M10 50C10 50 40 10 70 10C100 10 130 50 130 50" stroke="rgba(0,0,0,0.05)" stroke-width="2" stroke-linecap="round" stroke-dasharray="0.1 8" />
-            
-            <!-- Animated dots -->
-            <circle r="3" fill="currentColor">
-                <animateMotion dur="2s" repeatCount="indefinite" path="M10 50C10 50 40 10 70 10C100 10 130 50 130 50" />
-            </circle>
-            <circle r="3" fill="currentColor" opacity="0.6">
-                <animateMotion dur="2s" begin="0.6s" repeatCount="indefinite" path="M10 50C10 50 40 10 70 10C100 10 130 50 130 50" />
-            </circle>
-            <circle r="3" fill="currentColor" opacity="0.3">
-                <animateMotion dur="2s" begin="1.2s" repeatCount="indefinite" path="M10 50C10 50 40 10 70 10C100 10 130 50 130 50" />
-            </circle>
-        </svg>
-    </div>
-
-    <!-- Destination: Smartphone -->
-    <div class="visual-node phone-node">
-        <i data-lucide="smartphone"></i>
-    </div>
-</div>
-                </div>
-                
-
-                <div class="purchase-card glass-panel glass-form">
-                    <h3>Order Details</h3>
-                    <div class="form-group">
-                        <label for="package">Select Package</label>
+                    <div class="form-group" style="width: 100%; margin-top: 2rem;">
+                        <label style="color: #444; font-weight: 700;">Select Data Volume</label>
                         <div class="bundle-grid" id="bundleGrid">
                             <div class="bundle-square active" data-gb="2" data-price="GHS 18.00">2<span>GB</span></div>
                             <div class="bundle-square" data-gb="10" data-price="GHS 49.00">10<span>GB</span></div>
@@ -77,37 +123,37 @@
                             <div class="bundle-square" data-gb="30" data-price="GHS 150.00">30<span>GB</span></div>
                             <div class="bundle-square" data-gb="50" data-price="GHS 230.00">50<span>GB</span></div>
                         </div>
-                        <input type="hidden" id="selectedBundle" value="1GB">
+                        <input type="hidden" id="selectedBundle" value="2GB">
                     </div>
+                </div>
 
+                <div class="purchase-card glass-panel glass-form">
+                    <h3>Order Details</h3>
                     <div class="price-display-container">
                         <span class="price-label">Price:</span>
-                        <span id="displayPrice" class="price-amount">GHS 18.00</span>
+                        <span id="displayPrice" class="price-amount" style="color: #E60000;">GHS 18.00</span>
                     </div>
-
-
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" placeholder="020 000 0000"> <!-- Telecel Prefix -->
+                        <input type="tel" id="phone" placeholder="020 000 0000" maxlength="10">
                     </div>
                     
                     <button onclick="handlePayment()" class="btn-primary" style="width: 100%; border:none; cursor:pointer;">
                         Proceed to Payment
                     </button>
                 </div>
+
             </div>
         </section>
     </main>
 
-    <div id="success-toast" class="notification success">Payment successful! Redirecting to secure checkout…</div>
-    <div id="error-toast" class="notification error">Please enter a valid phone number.</div>
+    <div id="error-toast" class="notification error">Please enter exactly 10 digits.</div>
 
     <footer class="footer">
-        <!-- EXACT SAME FOOTER AS MTN PAGE -->
         <div class="footer-container">
             <div class="footer-col">
-                <div class="logo"><div class="logo-icon"></div>CoreLink Internet</div>
-                <p class="footer-about">Providing premium, high-speed data solutions for digital pioneers across Ghana. Reliable, fast, and secure.</p>
+                <div class="logo"><div class="logo-icon" style="background: linear-gradient(135deg, #E60000, #990000);"></div>CoreLink Internet</div>
+                <p class="footer-about">Reliable, high-speed data solutions for digital pioneers across Ghana.</p>
                 <div class="social-links">
                     <a href="#"><i data-lucide="facebook"></i></a>
                     <a href="#"><i data-lucide="twitter"></i></a>
@@ -115,25 +161,7 @@
                 </div>
             </div>
             <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="index.html#home">Home</a></li>
-                    <li><a href="index.html#buy">Buy Data</a></li>
-                    <li><a href="index.html#support">Support</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Networks</h4>
-                <ul>
-                    <li><a href="mtn-bundles.html">MTN Ghana</a></li>
-                    <li><a href="telecel-bundles.html">Telecel Ghana</a></li>
-                    <li><a href="at-bundles.html">AT (AirtelTigo)</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact Us</h4>
-                <div class="contact-item"><i data-lucide="map-pin"></i><span>Accra, Ghana</span></div>
+                <h4>Support</h4>
                 <div class="contact-item"><i data-lucide="phone"></i><span>+233 55 639 7312</span></div>
                 <div class="contact-item"><i data-lucide="mail"></i><span>support@corelink.com</span></div>
             </div>
@@ -141,85 +169,73 @@
         <div class="footer-bottom"><p>&copy; 2026 CoreLink Internet. All Rights Reserved.</p></div>
     </footer>
 
-   <script>
-    lucide.createIcons();
+    <script>
+        lucide.createIcons();
 
-    // 1. WAKE UP BACKEND ON LOAD
-    window.onload = function() {
-        // Change this to your real Render URL
-        fetch('https://corelink-backend.onrender.com/ping')
-            .then(() => console.log("Engine Waking Up..."))
-            .catch(() => console.log("Engine starting..."));
-    };
+        window.onload = function() {
+            fetch('https://corelink-backend.onrender.com/ping').catch(() => {});
+        };
 
-    // 2. BUNDLE SELECTION LOGIC
-    document.querySelectorAll('.bundle-square').forEach(square => {
-        square.addEventListener('click', function() {
-            document.querySelectorAll('.bundle-square').forEach(s => s.classList.remove('active'));
-            this.classList.add('active');
-            
-            const gbValue = this.getAttribute('data-gb');
-            const priceText = this.getAttribute('data-price'); // e.g., "GHS 6.00"
-
-            document.getElementById('selectedBundle').value = gbValue + "GB";
-            document.getElementById('displayPrice').innerText = priceText;
+        document.querySelectorAll('.bundle-square').forEach(square => {
+            square.addEventListener('click', function() {
+                document.querySelectorAll('.bundle-square').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                const gbValue = this.getAttribute('data-gb');
+                const priceText = this.getAttribute('data-price');
+                document.getElementById('selectedBundle').value = gbValue + "GB";
+                document.getElementById('displayPrice').innerText = priceText;
+            });
         });
-    });
 
-    // 3. PAYMENT LOGIC (Calculates 3% only when button is clicked)
-   function handlePayment() {
-    const phoneField = document.getElementById('phone');
-    const phone = phoneField.value.replace(/\D/g, ''); 
+        function handlePayment() {
+            const phoneField = document.getElementById('phone');
+            const phone = phoneField.value.replace(/\D/g, ''); 
 
-    // 10 Digit Validation with Toast Notification
-    if (phone.length !== 10) {
-        const errorToast = document.getElementById('error-toast');
-        
-        // Update the text inside the toast
-        errorToast.innerText = "Please enter exactly 10 digits.";
-        
-        // Add the 'show' class to trigger the CSS animation
-        errorToast.classList.add('show');
-        
-        // Hide the notification after 3.2 seconds
-        setTimeout(() => {
-            errorToast.classList.remove('show');
-        }, 3200);
-        
-        return; // Stops the code from proceeding to Paystack
-    }
+            if (phone.length !== 10) {
+                const errorToast = document.getElementById('error-toast');
+                errorToast.classList.add('show');
+                setTimeout(() => errorToast.classList.remove('show'), 3200);
+                return;
+            }
 
-    const priceText = document.getElementById('displayPrice').innerText;
-    const basePrice = parseFloat(priceText.replace('GHS', '').trim());
+            const priceText = document.getElementById('displayPrice').innerText;
+            const basePrice = parseFloat(priceText.replace('GHS', '').trim());
 
-    // CALCULATE FEE & TOTAL
-    const fee = basePrice * 0.03;
-    const totalToCharge = basePrice + fee;
-    const finalAmountInPesewas = Math.round(totalToCharge * 100);
+            const fee = basePrice * 0.03;
+            const totalToCharge = basePrice + fee;
+            const finalInPesewas = Math.round(totalToCharge * 100);
+            const bundle = document.getElementById('selectedBundle').value;
 
-    const bundle = document.getElementById('selectedBundle').value;
-    let network = document.body.classList.contains('telecel-page') ? "Telecel" : 
-                  document.body.classList.contains('at-page') ? "AT" : "MTN";
-
-    let handler = PaystackPop.setup({
-        key: 'pk_live_ce69a3127d3438693f86aba5700bf4ef5b7f3014',
-        email: phone + "@corelink.com",
-        amount: finalAmountInPesewas, 
-        currency: 'GHS',
-        metadata: {
-            custom_fields: [
-                { display_name: "Phone", value: phone },
-                { display_name: "Bundle", value: bundle }
-            ]
-        },
-        callback: function(response) {
-            // CRITICAL: This line sends the base and fee to success.html
-            // DO NOT MISS &base= and &fee= in the line below
-            window.location.href = `success.html?ref=${response.reference}&phone=${phone}&bundle=${bundle}&amount=GHS${totalToCharge.toFixed(2)}&base=${basePrice.toFixed(2)}&fee=${fee.toFixed(2)}&network=${network}`;
+            let handler = PaystackPop.setup({
+                key: 'pk_live_ce69a3127d3438693f86aba5700bf4ef5b7f3014',
+                email: phone + "@corelink.com",
+                amount: finalInPesewas,
+                currency: 'GHS',
+                metadata: {
+                    custom_fields: [
+                        { display_name: "Phone", value: phone },
+                        { display_name: "Bundle", value: bundle },
+                        { display_name: "Network", value: "Telecel" }
+                    ]
+                },
+                callback: function(response) {
+                    window.location.href = `success.html?ref=${response.reference}&phone=${phone}&bundle=${bundle}&amount=GHS${totalToCharge.toFixed(2)}&base=${basePrice.toFixed(2)}&fee=${fee.toFixed(2)}&network=Telecel`;
+                }
+            });
+            handler.openIframe();
         }
-    });
-    handler.openIframe();
-}
-</script>
+
+        // Scroll Reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.purchase-copy h2, .purchase-copy p, .bundle-grid, .purchase-card, .price-display-container').forEach((el) => {
+            if (!el.closest('.footer')) {
+                el.classList.add('reveal');
+                revealObserver.observe(el);
+            }
+        });
+    </script>
 </body>
 </html>

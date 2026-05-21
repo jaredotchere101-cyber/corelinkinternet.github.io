@@ -3,160 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction Receipt | CoreLink</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>CoreLink Admin | Control Center</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@0.344.0"></script>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .receipt-card {
-            background: white;
-            color: #0A0E1A;
-            max-width: 450px;
-            width: 100%;
-            padding: 40px;
-            border-radius: 32px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-        .success-icon {
-            width: 70px;
-            height: 70px;
-            background: #27AE60;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-        .receipt-details {
-            background: #F8F9FA;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 25px 0;
-            text-align: left;
-            border: 1px dashed #DDD;
-        }
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-        .detail-row span:first-child { color: #888; }
-        .detail-row span:last-child { font-weight: 700; color: #0A0E1A; }
-        .total-row {
-            border-top: 1px solid #EEE;
-            margin-top: 10px;
-            padding-top: 10px;
-        }
-        .btn-whatsapp {
-            background: #25D366;
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 1rem;
-            border-radius: 18px;
-            font-weight: 700;
-            margin-top: 10px;
-        }
-        @media print {
-            .no-print { display: none; }
-            body { background: white; }
-            .receipt-card { box-shadow: none; border: 1px solid #EEE; }
-        }
+        :root { --sidebar-w: 280px; }
+        body { background: #05070A; display: flex; color: white; overflow: hidden; }
+        
+        /* Sidebar Navigation */
+        .sidebar { width: var(--sidebar-w); background: #0A0E1A; border-right: 1px solid rgba(255,255,255,0.05); padding: 40px 20px; display: flex; flex-direction: column; height: 100vh; }
+        .nav-item { padding: 14px 20px; border-radius: 12px; color: #888; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: 0.3s; margin-bottom: 5px; }
+        .nav-item:hover, .nav-item.active { background: rgba(255,215,0,0.1); color: var(--yellow); }
+
+        /* Main View */
+        .dashboard-container { flex: 1; height: 100vh; overflow-y: auto; padding: 40px 60px; }
+        
+        /* Dashboard Stats Cards */
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 30px 0; }
+        .dash-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 25px; border-radius: 24px; position: relative; overflow: hidden; }
+        .dash-card h4 { font-size: 0.75rem; text-transform: uppercase; color: #555; margin-bottom: 10px; letter-spacing: 1px; }
+        .dash-card .val { font-size: 2rem; font-weight: 800; color: white; }
+        .dash-card .trend { font-size: 0.75rem; color: #27AE60; margin-top: 5px; display: flex; align-items: center; gap: 4px; }
+
+        /* Table Design */
+        .table-wrap { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 10px; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 20px; color: #444; font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 20px; border-top: 1px solid rgba(255,255,255,0.03); font-size: 0.9rem; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .status-paid { background: #27AE60; box-shadow: 0 0 10px #27AE60; }
+        
+        /* Action Button */
+        .btn-action { background: #1a1f2e; border: 1px solid #2d3446; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .btn-action:hover { background: var(--yellow); color: black; }
+
+        .search-bar { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px; color: white; width: 300px; }
     </style>
 </head>
 <body>
 
-    <div class="receipt-card reveal active">
-        <div class="success-icon">
-            <i data-lucide="check-circle-2" style="width: 40px; height: 40px;"></i>
+    <aside class="sidebar">
+        <div class="logo" style="margin-bottom: 60px;"><div class="logo-icon"></div>CoreLink Admin</div>
+        <a href="admin.html" class="nav-item active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="admin-orders.html" class="nav-item"><i data-lucide="shopping-cart"></i> Orders</a>
+        <a href="admin-customers.html" class="nav-item"><i data-lucide="users"></i> Customers</a>
+        <a href="admin-analytics.html" class="nav-item"><i data-lucide="bar-chart-3"></i> Analytics</a>
+        <a href="admin-settings.html" class="nav-item"><i data-lucide="settings"></i> Settings</a>
+        
+        <div style="margin-top: auto; padding: 20px; background: rgba(255,215,0,0.05); border-radius: 15px;">
+            <p style="font-size: 0.7rem; color: var(--yellow);">SYSTEM STATUS</p>
+            <p style="font-size: 0.85rem;">All Systems Operational</p>
         </div>
-        <h2 style="font-weight: 800; letter-spacing: -0.02em;">Payment Successful!</h2>
-        <p style="color: #666; font-size: 0.95rem; margin-top: 5px;">Your order is being processed.</p>
+    </aside>
 
-        <div class="receipt-details">
-            <div class="detail-row">
-                <span>Reference</span>
-                <span id="rec-ref">---</span>
+    <main class="dashboard-container">
+        <header style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="font-size: 2.2rem; font-weight: 800;">Overview</h1>
+                <p style="color: #666;">Real-time performance and order tracking.</p>
             </div>
-            <div class="detail-row">
-                <span>Date</span>
-                <span id="rec-date">---</span>
-            </div>
-            <div class="detail-row">
-                <span>Network</span>
-                <span id="rec-network">---</span>
-            </div>
-            <div class="detail-row">
-                <span>Recipient</span>
-                <span id="rec-phone">---</span>
-            </div>
-            <div class="detail-row">
-                <span>Data Bundle</span>
-                <span id="rec-bundle">---</span>
-            </div>
-            <div class="detail-row total-row">
-                <span>Amount Paid</span>
-                <span id="rec-amount" style="color: #27AE60; font-size: 1.1rem;">---</span>
-            </div>
+            <input type="text" class="search-bar" placeholder="Search phone or reference...">
+        </header>
+
+        <div class="grid-4">
+            <div class="dash-card"><h4>Total Revenue</h4><div class="val">GHS 4,250.00</div><div class="trend"><i data-lucide="trending-up"></i> 12% vs last month</div></div>
+            <div class="dash-card"><h4>Total Orders</h4><div class="val">184</div><div class="trend"><i data-lucide="trending-up"></i> 8% today</div></div>
+            <div class="dash-card"><h4>Active Float</h4><div class="val">GHS 840.12</div><div style="color: #E67E22; font-size: 0.7rem;">Vendor: Shaba.io</div></div>
+            <div class="dash-card"><h4>Success Rate</h4><div class="val">99.2%</div><div class="trend">1 Failed Order</div></div>
         </div>
 
-        <div class="no-print">
-            <button onclick="window.print()" class="btn-primary" style="width: 100%; border:none; cursor:pointer; margin-bottom: 10px;">
-                <i data-lucide="download" style="width: 18px; vertical-align: middle; margin-right: 8px;"></i> Save as PDF / Print
-            </button>
-            
-            <a id="whatsappLink" href="#" class="btn-whatsapp">
-                <i data-lucide="message-circle" style="width: 18px;"></i> Notify on WhatsApp
-            </a>
-
-            <a href="index.html" style="display: block; margin-top: 20px; color: #888; text-decoration: none; font-size: 0.85rem; font-weight: 600;">Return to Homepage</a>
+        <h3 style="margin-top: 50px; font-weight: 700;">Recent Transactions</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Customer</th>
+                        <th>Network</th>
+                        <th>Service</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                    <!-- Real-time data will appear here -->
+                </tbody>
+            </table>
         </div>
-    </div>
+    </main>
 
     <script>
         lucide.createIcons();
 
-        // 1. Get Data from URL
-        const params = new URLSearchParams(window.location.search);
-        const ref = params.get('ref') || "N/A";
-        const phone = params.get('phone') || "N/A";
-        const bundle = params.get('bundle') || "N/A";
-        const amount = params.get('amount') || "N/A";
-        const network = params.get('network') || "Network";
-        const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
+        // Sample "Fully Fledged" Data
+        const orders = [
+            { time: "Just Now", phone: "0245639731", net: "MTN", type: "10GB Data", amt: "GHS 20.00", status: "Paid" },
+            { time: "12 mins ago", phone: "0208899112", net: "Telecel", type: "Airtime", amt: "GHS 50.00", status: "Paid" },
+            { time: "45 mins ago", phone: "0264433221", net: "AT", type: "3GB Data", amt: "GHS 8.00", status: "Paid" },
+            { time: "2 hours ago", phone: "0559988771", net: "MTN", type: "50GB Data", amt: "GHS 85.00", status: "Paid" }
+        ];
 
-        // 2. Display Data
-        document.getElementById('rec-ref').innerText = ref;
-        document.getElementById('rec-phone').innerText = phone;
-        document.getElementById('rec-bundle').innerText = bundle;
-        document.getElementById('rec-amount').innerText = amount;
-        document.getElementById('rec-network').innerText = network;
-        document.getElementById('rec-date').innerText = date;
+        function renderOrders() {
+            const container = document.getElementById('adminTableBody');
+            container.innerHTML = orders.map(o => `
+                <tr>
+                    <td style="color: #666;">${o.time}</td>
+                    <td style="font-weight: 700;">${o.phone}</td>
+                    <td><span class="badge ${o.net.toLowerCase()}">${o.net}</span></td>
+                    <td>${o.type}</td>
+                    <td style="color: #27AE60; font-weight: 700;">${o.amt}</td>
+                    <td><span class="status-dot status-paid"></span>${o.status}</td>
+                    <td><button class="btn-action" onclick="copyNum('${o.phone}')">Process</button></td>
+                </tr>
+            `).join('');
+        }
 
-        // 3. Setup WhatsApp Link
-        const waMessage = `Hello CoreLink, I've just paid for data!%0A%0A` +
-                          `*Reference:* ${ref}%0A` +
-                          `*Network:* ${network}%0A` +
-                          `*Bundle:* ${bundle}%0A` +
-                          `*Phone:* ${phone}%0A` +
-                          `*Amount:* ${amount}`;
-        
-        // Replace with your actual business number
-        document.getElementById('whatsappLink').href = `https://wa.me/233556397312?text=${waMessage}`;
+        function copyNum(num) {
+            navigator.clipboard.writeText(num);
+            alert("Phone " + num + " copied. Opening vendor portal...");
+            window.open("https://www.nkaydata.com/login", "_blank");
+        }
+
+        renderOrders();
     </script>
 </body>
 </html>

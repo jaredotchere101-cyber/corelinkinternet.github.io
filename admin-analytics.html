@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Name | CoreLink</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your same CSS -->
+    <script src="https://unpkg.com/lucide@0.344.0"></script>
+    <style>
+        /* Paste the specific Admin CSS I gave you earlier here 
+           inside these style tags so all admin pages look the same */
+        :root { --sidebar-w: 280px; }
+        body { background: #05070A; display: flex; color: white; overflow: hidden; }
+        
+        /* Sidebar Navigation */
+        .sidebar { width: var(--sidebar-w); background: #0A0E1A; border-right: 1px solid rgba(255,255,255,0.05); padding: 40px 20px; display: flex; flex-direction: column; height: 100vh; }
+        .nav-item { padding: 14px 20px; border-radius: 12px; color: #888; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: 0.3s; margin-bottom: 5px; }
+        .nav-item:hover, .nav-item.active { background: rgba(255,215,0,0.1); color: var(--yellow); }
+
+        /* Main View */
+        .dashboard-container { flex: 1; height: 100vh; overflow-y: auto; padding: 40px 60px; }
+        
+        /* Dashboard Stats Cards */
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 30px 0; }
+        .dash-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 25px; border-radius: 24px; position: relative; overflow: hidden; }
+        .dash-card h4 { font-size: 0.75rem; text-transform: uppercase; color: #555; margin-bottom: 10px; letter-spacing: 1px; }
+        .dash-card .val { font-size: 2rem; font-weight: 800; color: white; }
+        .dash-card .trend { font-size: 0.75rem; color: #27AE60; margin-top: 5px; display: flex; align-items: center; gap: 4px; }
+
+        /* Table Design */
+        .table-wrap { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 10px; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 20px; color: #444; font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 20px; border-top: 1px solid rgba(255,255,255,0.03); font-size: 0.9rem; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .status-paid { background: #27AE60; box-shadow: 0 0 10px #27AE60; }
+        
+        /* Action Button */
+        .btn-action { background: #1a1f2e; border: 1px solid #2d3446; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .btn-action:hover { background: var(--yellow); color: black; }
+
+        .search-bar { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px; color: white; width: 300px; }   
+    </style>
+</head>
+<body>
+
+    <!-- 1. THE SIDEBAR (Must be in every file) -->
+    <aside class="sidebar">
+        <div class="logo" style="margin-bottom: 60px;"><div class="logo-icon"></div>CoreLink Admin</div>
+        <a href="admin.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="admin-orders.html" class="nav-item"><i data-lucide="shopping-cart"></i> Orders</a>
+        <a href="admin-customers.html" class="nav-item"><i data-lucide="users"></i> Customers</a>
+        <a href="admin-analytics.html" class="nav-item"><i data-lucide="bar-chart-3"></i> Analytics</a>
+        <a href="admin-settings.html" class="nav-item"><i data-lucide="settings"></i> Settings</a>
+    </aside>
+
+    <!-- 2. THE MAIN CONTENT (This is the only part that changes) -->
+    <main class="dashboard-container">
+        <h1>Revenue Analytics</h1>
+    
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-top: 30px;">
+        <!-- Network Distribution Bar -->
+        <div class="dash-card" style="height: 300px;">
+            <h4>Network Popularity</h4>
+            <div style="margin-top: 40px;">
+                <p>MTN (75%)</p>
+                <div style="width: 75%; height: 12px; background: #FFCC00; border-radius: 10px; margin-bottom: 20px;"></div>
+                <p>Telecel (20%)</p>
+                <div style="width: 20%; height: 12px; background: #E60000; border-radius: 10px; margin-bottom: 20px;"></div>
+                <p>AT (5%)</p>
+                <div style="width: 5%; height: 12px; background: #0054A6; border-radius: 10px;"></div>
+            </div>
+        </div>
+
+        <div class="dash-card">
+            <h4>Profit Summary</h4>
+            <div style="margin-top: 20px;">
+                <div style="margin-bottom: 15px;">
+                    <span style="color: #888; font-size: 0.8rem;">Gross Revenue</span>
+                    <p style="font-size: 1.5rem; font-weight: 700;">GHS 12,450</p>
+                </div>
+                <div>
+                    <span style="color: #888; font-size: 0.8rem;">Net Profit (After API Costs)</span>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: #27AE60;">GHS 3,120</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+        // Page specific scripts here
+    </script>
+</body>
+</html>

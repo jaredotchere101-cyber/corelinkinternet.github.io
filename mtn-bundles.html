@@ -68,25 +68,25 @@
                     <div class="form-group">
                         <label for="package">Select Package</label>
                          <div class="bundle-grid" id="bundleGrid">
-        <!-- The squares -->
-        <div class="bundle-square active" data-gb="1" data-price="GHS 3.00">1<span>GB</span></div>
-        <div class="bundle-square" data-gb="2" data-price="GHS 5.50">2<span>GB</span></div>
-        <div class="bundle-square" data-gb="3" data-price="GHS 8.00">3<span>GB</span></div>
-        <div class="bundle-square" data-gb="5" data-price="GHS 10.00">5<span>GB</span></div>
-        <div class="bundle-square" data-gb="6" data-price="GHS 12.00">6<span>GB</span></div>
-        <div class="bundle-square" data-gb="7" data-price="GHS 14.50">7<span>GB</span></div>
-        <div class="bundle-square" data-gb="8" data-price="GHS 16.00">8<span>GB</span></div>
-        <div class="bundle-square" data-gb="10" data-price="GHS 20.00">10<span>GB</span></div>
-        <div class="bundle-square" data-gb="15" data-price="GHS 30.00">15<span>GB</span></div>
-        <div class="bundle-square" data-gb="25" data-price="GHS 45.00">25<span>GB</span></div>
-        <div class="bundle-square" data-gb="50" data-price="GHS 85.00">50<span>GB</span></div>
-    </div>
+    <div class="bundle-square active" data-gb="1" data-price="GHS 6.00">1<span>GB</span></div>
+    <div class="bundle-square" data-gb="2" data-price="GHS 11.00">2<span>GB</span></div>
+    <div class="bundle-square" data-gb="3" data-price="GHS 16.00">3<span>GB</span></div>
+    <div class="bundle-square" data-gb="5" data-price="GHS 27.00">5<span>GB</span></div>
+    <div class="bundle-square" data-gb="6" data-price="GHS 34.00">6<span>GB</span></div>
+    <div class="bundle-square" data-gb="7" data-price="GHS 37.00">7<span>GB</span></div>
+    <div class="bundle-square" data-gb="8" data-price="GHS 44.00">8<span>GB</span></div>
+    <div class="bundle-square" data-gb="10" data-price="GHS 49.00">10<span>GB</span></div>
+    <div class="bundle-square" data-gb="15" data-price="GHS 78.00">15<span>GB</span></div>
+    <div class="bundle-square" data-gb="20" data-price="GHS 98.00">20<span>GB</span></div>
+    <div class="bundle-square" data-gb="25" data-price="GHS 114.00">25<span>GB</span></div>
+    <div class="bundle-square" data-gb="100" data-price="GHS 390.00">100<span>GB</span></div>
+</div>
     <!-- Hidden input to store the selection for your form -->
     <input type="hidden" id="selectedBundle" value="1GB">
 </div>
                      <div class="price-display-container">
         <span class="price-label">Price:</span>
-        <span id="displayPrice" class="price-amount">GHS 3.00</span>
+        <span id="displayPrice" class="price-amount">GHS 6.00</span>
     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
@@ -106,53 +106,82 @@
     <div id="error-toast" class="notification error">Please enter a valid phone number.</div>
 
     <script>
-        lucide.createIcons();
-        // This wakes up the backend server immediately when the page loads
-window.onload = function() {
-    fetch('https://corelink-backend.onrender.com/ping') // REPLACE with your actual Render URL
-        .then(() => console.log("CoreLink Engine waking up..."))
-        .catch(() => console.log("Engine startup initiated."));
-};
+    lucide.createIcons();
 
-        function handlePayment() {
-    const phone = document.getElementById('phone').value.trim();
-    const amountText = document.getElementById('displayPrice').innerText; 
-    const bundle = document.getElementById('selectedBundle').value; 
-    
-    // 1. Validation (We keep the error notification just in case)
-    if (phone.length < 10 || !/^[0-9 ]+$/.test(phone)) {
+    // 1. WAKE UP BACKEND ON LOAD
+    window.onload = function() {
+        // Change this to your real Render URL
+        fetch('https://corelink-backend.onrender.com/ping')
+            .then(() => console.log("Engine Waking Up..."))
+            .catch(() => console.log("Engine starting..."));
+    };
+
+    // 2. BUNDLE SELECTION LOGIC
+    document.querySelectorAll('.bundle-square').forEach(square => {
+        square.addEventListener('click', function() {
+            document.querySelectorAll('.bundle-square').forEach(s => s.classList.remove('active'));
+            this.classList.add('active');
+            
+            const gbValue = this.getAttribute('data-gb');
+            const priceText = this.getAttribute('data-price'); // e.g., "GHS 6.00"
+
+            document.getElementById('selectedBundle').value = gbValue + "GB";
+            document.getElementById('displayPrice').innerText = priceText;
+        });
+    });
+
+    // 3. PAYMENT LOGIC (Calculates 3% only when button is clicked)
+    function handlePayment() {
+    const phoneField = document.getElementById('phone');
+    const phone = phoneField.value.replace(/\D/g, ''); 
+
+    // 10 Digit Validation with Toast Notification
+    if (phone.length !== 10) {
         const errorToast = document.getElementById('error-toast');
+        
+        // Update the text inside the toast
+        errorToast.innerText = "Please enter exactly 10 digits.";
+        
+        // Add the 'show' class to trigger the CSS animation
         errorToast.classList.add('show');
-        setTimeout(() => errorToast.classList.remove('show'), 3200);
-        return;
+        
+        // Hide the notification after 3.2 seconds
+        setTimeout(() => {
+            errorToast.classList.remove('show');
+        }, 3200);
+        
+        return; // Stops the code from proceeding to Paystack
     }
 
-    // 2. Paystack Setup
-    const customerEmail = phone + "@corelink.com"; 
-    const finalAmount = parseFloat(amountText.replace('GHS', '').trim()) * 100;
+    const priceText = document.getElementById('displayPrice').innerText;
+    const basePrice = parseFloat(priceText.replace('GHS', '').trim());
+
+    // CALCULATE FEE & TOTAL
+    const fee = basePrice * 0.03;
+    const totalToCharge = basePrice + fee;
+    const finalAmountInPesewas = Math.round(totalToCharge * 100);
+
+    const bundle = document.getElementById('selectedBundle').value;
+    let network = document.body.classList.contains('telecel-page') ? "Telecel" : 
+                  document.body.classList.contains('at-page') ? "AT" : "MTN";
 
     let handler = PaystackPop.setup({
-        key: 'pk_live_ce69a3127d3438693f86aba5700bf4ef5b7f3014', // Ensure your key is here!
-        email: customerEmail,
-        amount: finalAmount,
+        key: 'pk_live_ce69a3127d3438693f86aba5700bf4ef5b7f3014',
+        email: phone + "@corelink.com",
+        amount: finalAmountInPesewas, 
         currency: 'GHS',
-        ref: 'CL-' + Math.floor((Math.random() * 1000000000) + 1),
         metadata: {
             custom_fields: [
-                { display_name: "Phone Number", variable_name: "phone_number", value: phone },
-                { display_name: "Network", variable_name: "network", value: "MTN" },
-                { display_name: "Bundle", variable_name: "bundle", value: bundle }
+                { display_name: "Phone", value: phone },
+                { display_name: "Bundle", value: bundle }
             ]
         },
         callback: function(response) {
-            // ONLY NOW do we go to the success page
-            window.location.href = `success.html?ref=${response.reference}&phone=${phone}&bundle=${bundle}&amount=${amountText}&network=MTN`;
-        },
-        onClose: function() {
-            // No success message shown if they close the window
+            // CRITICAL: This line sends the base and fee to success.html
+            // DO NOT MISS &base= and &fee= in the line below
+            window.location.href = `success.html?ref=${response.reference}&phone=${phone}&bundle=${bundle}&amount=GHS${totalToCharge.toFixed(2)}&base=${basePrice.toFixed(2)}&fee=${fee.toFixed(2)}&network=${network}`;
         }
     });
-
     handler.openIframe();
 }
     </script>
@@ -171,7 +200,6 @@ window.onload = function() {
                 <a href="#"><i data-lucide="facebook"></i></a>
                 <a href="#"><i data-lucide="twitter"></i></a>
                 <a href="#"><i data-lucide="instagram"></i></a>
-                <a href="#"><i data-lucide="linkedin"></i></a>
             </div>
         </div>
 
@@ -193,7 +221,6 @@ window.onload = function() {
                 <li><a href="mtn-bundles.html">MTN Ghana</a></li>
                 <li><a href="telecel-bundles.html">Telecel Ghana</a></li>
                 <li><a href="at-bundles.html">AT (AirtelTigo)</a></li>
-                <li><a href="#">Big Time Data</a></li>
             </ul>
         </div>
 
@@ -216,67 +243,10 @@ window.onload = function() {
     </div>
 
     <div class="footer-bottom">
-        <p>&copy; 2026 CoreLink Premium Data. All Rights Reserved.</p>
+        <p>&copy; 2026 CoreLink Internet. All Rights Reserved.</p>
     </div>
 </footer>
-<script>
-    lucide.createIcons();
-    document.querySelectorAll('.bundle-square').forEach(square => {
-    square.addEventListener('click', function() {
-        // 1. Remove active class from all squares
-        document.querySelectorAll('.bundle-square').forEach(s => s.classList.remove('active'));
-        
-        // 2. Add active class to the one clicked
-        this.classList.add('active');
-        
-        // 3. Get the data from the attributes
-        const gbValue = this.getAttribute('data-gb');
-        const priceValue = this.getAttribute('data-price');
-        
-        // 4. Update the Hidden Input (for the form)
-        document.getElementById('selectedBundle').value = gbValue + "GB";
-        
-        // 5. Update the Screen Display (for the customer)
-        document.getElementById('displayPrice').innerText = priceValue;
-    });
-});
 
-
-    // 2. The Scroll Reveal Logic (using your existing CSS)
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
-        });
-    }, { threshold: 0.1 });
-
-    // 3. Target the specific elements on the bundle page
-    // We target the Title, Description, the Bundle Grid, and the Checkout Card
-    document.querySelectorAll('.purchase-copy h2, .purchase-copy p, .bundle-grid, .purchase-card, .price-display-container').forEach((el) => {
-        // This ensures we do NOT animate the footer/support section
-        if (!el.closest('.footer')) {
-            el.classList.add('reveal'); // Applying your existing CSS class
-            revealObserver.observe(el);
-        }
-    });
-
-    // 4. Keep your existing Bundle Selection Logic below
-    document.querySelectorAll('.bundle-square').forEach(square => {
-        square.addEventListener('click', function() {
-            document.querySelectorAll('.bundle-square').forEach(s => s.classList.remove('active'));
-            this.classList.add('active');
-            
-            const gbValue = this.getAttribute('data-gb');
-            const priceValue = this.getAttribute('data-price');
-            
-            document.getElementById('selectedBundle').value = gbValue + "GB";
-            document.getElementById('displayPrice').innerText = priceValue;
-        });
-    });
-
-   
-</script>
 </body>
 
 </html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Airtime | CoreLink</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="https://unpkg.com/lucide@0.344.0"></script>
+    <style>
+        /* Specific Fixes for Mobile Responsiveness */
+        .purchase-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            align-items: start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .network-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .net-btn {
+            padding: 12px 20px;
+            border-radius: 14px;
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .net-btn.active[data-net="mtn"] { background: #FFCC00; color: black; border-color: #FFCC00; }
+        .net-btn.active[data-net="telecel"] { background: #E60000; color: white; border-color: #E60000; }
+        .net-btn.active[data-net="at"] { background: linear-gradient(90deg, #ED1C24, #0054A6); color: white; border-color: transparent; }
+
+        /* Responsive Mobile Adjustments */
+        @media (max-width: 768px) {
+            .purchase-grid {
+                grid-template-columns: 1fr; /* Stack vertically */
+                gap: 1.5rem;
+                padding: 0 5%;
+            }
+            .purchase-card {
+                width: 100%; /* Ensure box doesn't overflow */
+                max-width: 100%;
+                padding: 1.5rem !important; /* Tighten padding for small screens */
+            }
+            .purchase-copy {
+                padding: 1rem 0 !important;
+                text-align: center;
+            }
+        }
+        /* --- Dynamic Themes --- */
+
+/* MTN Theme (Default) */
+.mtn-theme .status-badge { background: #181716; color: #FFCC00; }
+.mtn-theme .btn-primary { background: #FFCC00; color: black; }
+.mtn-theme .transfer-path { color: #FFCC00; }
+
+/* Telecel Theme */
+.telecel-theme .status-badge { background: #E60000; color: white; }
+.telecel-theme .btn-primary { background: #E60000; color: white; }
+.telecel-theme .transfer-path { color: #E60000; }
+
+/* AT Theme */
+.at-theme .status-badge { background: linear-gradient(90deg, #ED1C24, #0054A6); color: white; border: none; }
+.at-theme .btn-primary { background: linear-gradient(90deg, #ED1C24, #0054A6); color: white; border: none; }
+.at-theme .transfer-path { color: #0054A6; }
+
+/* Ensure the Paystack button has a smooth transition */
+#payBtn {
+    transition: background 0.4s ease, transform 0.2s ease;
+}
+
+/* Fix for AT gradient button hover */
+.at-theme .btn-primary:hover {
+    filter: brightness(1.1);
+}
+    </style>
+</head>
+<body class="airtime-page">
+    <nav>
+        <div class="logo"><div class="logo-icon"></div>CoreLink</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#buy">Bundles</a></li>
+            <li><a href="admin.html" class="btn-nav">Admin</a></li>
+        </ul>
+    </nav>
+
+    <main style="padding-top: 100px;">
+        <section class="purchase-section">
+            <div class="purchase-grid">
+                
+                <!-- Left Side: Copy & Network Selection -->
+                <div class="purchase-copy">
+                    <span class="status-badge" id="networkLabel">MTN Ghana</span>
+                    <h2>Buy Airtime</h2>
+                    <p>Enter any amount (min GHS 1.00) and top up any network instantly.</p>
+                    
+                    <div class="network-selector">
+                        <div class="net-btn active" onclick="setNetwork('MTN')" data-net="mtn">MTN</div>
+                        <div class="net-btn" onclick="setNetwork('Telecel')" data-net="telecel">Telecel</div>
+                        <div class="net-btn" onclick="setNetwork('AT')" data-net="at">AT</div>
+                    </div>
+
+                    <!-- Small Data Visual -->
+                    <div class="data-transfer-visual" style="margin-top: 2rem; transform: scale(0.85);">
+                        <div class="visual-node"><i data-lucide="antenna"></i></div>
+                        <div class="transfer-path">
+                            <svg width="100" height="40" viewBox="0 0 100 40"><path d="M10 30 Q 50 0 90 30" stroke="rgba(0,0,0,0.1)" fill="none" stroke-width="2" stroke-dasharray="4 4" /></svg>
+                        </div>
+                        <div class="visual-node"><i data-lucide="smartphone"></i></div>
+                    </div>
+                </div>
+
+                <!-- Right Side: The Order Details Box (Responsive) -->
+                <div class="purchase-card glass-panel glass-form">
+                    <h3 style="color: #0A0E1A; margin-bottom: 20px;">Order Details</h3>
+                    
+                    <div class="form-group">
+                        <label>Amount (GHS)</label>
+                        <input type="number" id="airtimeAmount" placeholder="e.g. 10" min="1" oninput="updateDisplay()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phone" placeholder="0240000000" maxlength="10" autocomplete="tel">
+                    </div>
+
+                    <div class="price-display-container">
+                        <span class="price-label">Price:</span>
+                        <!-- Displaying only base price to user as per your strategy -->
+                        <span id="displayPrice" class="price-amount" style="color: #0A0E1A;">GHS 0.00</span>
+                    </div>
+
+                    <div id="error-toast" class="notification error">Please enter 10 digits.</div>
+
+                    <button onclick="handlePayment()" class="btn-primary" id="payBtn" style="width: 100%; border:none; margin-top: 15px;">
+                        Proceed to Payment
+                    </button>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+   <footer class="footer" id="support">
+    <div class="footer-container">
+        <!-- Column 1: Brand & About -->
+        <div class="footer-col">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                CoreLink Internet 
+            </div>
+            <p class="footer-about">
+                Providing premium, high-speed data solutions for digital pioneers across Ghana. Reliable, fast, and secure.
+            </p>
+            <div class="social-links">
+                <a href="#"><i data-lucide="facebook"></i></a>
+                <a href="#"><i data-lucide="twitter"></i></a>
+                <a href="#"><i data-lucide="instagram"></i></a>
+            </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#buy">Buy Data</a></li>
+                <li><a href="index.html#support">Support</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 3: Networks -->
+        <div class="footer-col">
+            <h4>Networks</h4>
+            <ul>
+                <li><a href="mtn-bundles.html">MTN Ghana</a></li>
+                <li><a href="telecel-bundles.html">Telecel Ghana</a></li>
+                <li><a href="at-bundles.html">AT (AirtelTigo)</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 4: Contact Info -->
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <div class="contact-item">
+                <i data-lucide="map-pin"></i>
+                <span>Accra, Ghana</span>
+            </div>
+            <div class="contact-item">
+                <i data-lucide="phone"></i>
+                <span>+233 55 639 7312</span>
+            </div>
+            <div class="contact-item">
+                <i data-lucide="mail"></i>
+                <span>support@corelink.com</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 CoreLink Internet. All Rights Reserved.</p>
+    </div>
+</footer>
+
+    <script>
+        lucide.createIcons();
+        let activeNet = "MTN";
+
+        // Wake up backend
+        window.onload = function() {
+            fetch('https://corelink-backend.onrender.com/ping').catch(() => {});
+        };
+
+        function setNetwork(net) {
+    activeNet = net;
+    
+    // 1. Update the Text Label
+    document.getElementById('networkLabel').innerText = net + " Ghana";
+    
+    // 2. Update active state of selection buttons
+    document.querySelectorAll('.net-btn').forEach(btn => btn.classList.remove('active'));
+    // We use event.currentTarget to ensure we catch the button click
+    event.currentTarget.classList.add('active');
+
+    // 3. Switch the Theme on the Body
+    document.body.classList.remove('mtn-theme', 'telecel-theme', 'at-theme');
+    document.body.classList.add(net.toLowerCase() + '-theme');
+}
+
+        function updateDisplay() {
+            const amt = document.getElementById('airtimeAmount').value;
+            document.getElementById('displayPrice').innerText = "GHS " + parseFloat(amt || 0).toFixed(2);
+        }
+
+        function handlePayment() {
+            const rawPhone = document.getElementById('phone').value;
+            const phone = rawPhone.replace(/\D/g, ''); 
+            const amt = parseFloat(document.getElementById('airtimeAmount').value);
+
+            if (phone.length !== 10 || isNaN(amt) || amt < 1) {
+                const toast = document.getElementById('error-toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+                return;
+            }
+            const finalInPesewas = Math.round(amt * 100);
+
+            let handler = PaystackPop.setup({
+                key: 'pk_live_ce69a3127d3438693f86aba5700bf4ef5b7f3014',
+                email: phone + "@corelink.com",
+                amount: finalInPesewas,
+                currency: 'GHS',
+                metadata: {
+                    custom_fields: [
+                        { display_name: "Phone", value: phone },
+                        { display_name: "Network", value: activeNet },
+                        { display_name: "Type", value: "Airtime" }
+                    ]
+                },
+                callback: function(response) {
+                   window.location.href = `success.html?ref=${response.reference}&phone=${phone}&bundle=Airtime&amount=GHS${amt.toFixed(2)}&base=${amt.toFixed(2)}&fee=0.00&network=${activeNet}`;
+                }
+            });
+            handler.openIframe();
+        }
+    </script>
+</body>
+</html>

@@ -3,160 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction Receipt | CoreLink</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>Order Receipt | CoreLink</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@0.344.0"></script>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .receipt-card {
-            background: white;
-            color: #0A0E1A;
-            max-width: 450px;
-            width: 100%;
-            padding: 40px;
-            border-radius: 32px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-        .success-icon {
-            width: 70px;
-            height: 70px;
-            background: #27AE60;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-        .receipt-details {
-            background: #F8F9FA;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 25px 0;
-            text-align: left;
-            border: 1px dashed #DDD;
-        }
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
+        body { background: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; color: #0A0E1A; }
+        .receipt-card { background: white; max-width: 450px; width: 100%; padding: 40px; border-radius: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: center; }
+        .success-icon { width: 70px; height: 70px; background: #27AE60; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .receipt-details { background: #F8F9FA; border-radius: 20px; padding: 20px; margin: 25px 0; text-align: left; border: 1px dashed #DDD; }
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
         .detail-row span:first-child { color: #888; }
-        .detail-row span:last-child { font-weight: 700; color: #0A0E1A; }
-        .total-row {
-            border-top: 1px solid #EEE;
-            margin-top: 10px;
-            padding-top: 10px;
-        }
-        .btn-whatsapp {
-            background: #25D366;
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 1rem;
-            border-radius: 18px;
-            font-weight: 700;
-            margin-top: 10px;
-        }
-        @media print {
-            .no-print { display: none; }
-            body { background: white; }
-            .receipt-card { box-shadow: none; border: 1px solid #EEE; }
-        }
+        .detail-row span:last-child { font-weight: 700; }
+        .total-row { border-top: 1px solid #EEE; margin-top: 10px; padding-top: 10px; }
+        .btn-whatsapp { background: #25D366; color: white; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 1rem; border-radius: 18px; font-weight: 700; margin-top: 10px; }
+        @media print { .no-print { display: none; } }
     </style>
 </head>
 <body>
 
-    <div class="receipt-card reveal active">
-        <div class="success-icon">
-            <i data-lucide="check-circle-2" style="width: 40px; height: 40px;"></i>
-        </div>
-        <h2 style="font-weight: 800; letter-spacing: -0.02em;">Payment Successful!</h2>
-        <p style="color: #666; font-size: 0.95rem; margin-top: 5px;">Your order is being processed.</p>
+    <div class="receipt-card">
+        <div class="success-icon"><i data-lucide="check" style="width: 35px; height: 35px;"></i></div>
+        <h2 style="font-weight: 800;">Payment Successful!</h2>
+        <p style="color: #666; font-size: 0.9rem;">Your data is on the way.</p>
 
         <div class="receipt-details">
-            <div class="detail-row">
-                <span>Reference</span>
-                <span id="rec-ref">---</span>
-            </div>
-            <div class="detail-row">
-                <span>Date</span>
-                <span id="rec-date">---</span>
-            </div>
-            <div class="detail-row">
-                <span>Network</span>
-                <span id="rec-network">---</span>
-            </div>
-            <div class="detail-row">
-                <span>Recipient</span>
-                <span id="rec-phone">---</span>
-            </div>
-            <div class="detail-row">
-                <span>Data Bundle</span>
-                <span id="rec-bundle">---</span>
-            </div>
-            <div class="detail-row total-row">
-                <span>Amount Paid</span>
-                <span id="rec-amount" style="color: #27AE60; font-size: 1.1rem;">---</span>
-            </div>
-        </div>
+    <div class="detail-row"><span>Reference</span><span id="rec-ref">---</span></div>
+    <div class="detail-row"><span>Network</span><span id="rec-network">---</span></div>
+    <div class="detail-row"><span>Recipient</span><span id="rec-phone">---</span></div>
+    <div class="detail-row"><span>Bundle</span><span id="rec-bundle">---</span></div>
+    
+    <div style="border-top: 1px dashed #ddd; margin: 15px 0;"></div>
+    
+    <div class="detail-row">
+        <span>Bundle Price</span>
+        <span id="rec-base">GHS 0.00</span> <!-- CHECK THIS ID -->
+    </div>
+    <div class="detail-row">
+        <span>Service Fee (3%)</span>
+        <span id="rec-fee">GHS 0.00</span> <!-- CHECK THIS ID -->
+    </div>
+    <div class="detail-row total-row">
+        <span>Total Paid</span>
+        <span id="rec-total">GHS 0.00</span> <!-- CHECK THIS ID -->
+    </div>
+</div>
 
         <div class="no-print">
-            <button onclick="window.print()" class="btn-primary" style="width: 100%; border:none; cursor:pointer; margin-bottom: 10px;">
-                <i data-lucide="download" style="width: 18px; vertical-align: middle; margin-right: 8px;"></i> Save as PDF / Print
-            </button>
-            
-            <a id="whatsappLink" href="#" class="btn-whatsapp">
-                <i data-lucide="message-circle" style="width: 18px;"></i> Notify on WhatsApp
-            </a>
-
-            <a href="index.html" style="display: block; margin-top: 20px; color: #888; text-decoration: none; font-size: 0.85rem; font-weight: 600;">Return to Homepage</a>
+            <button onclick="window.print()" class="btn-primary" style="width: 100%; border:none; cursor:pointer; margin-bottom: 10px;">Save Receipt</button>
+            <a id="whatsappLink" href="#" class="btn-whatsapp"><i data-lucide="message-circle"></i> Notify on WhatsApp</a>
+            <a href="index.html" style="display: block; margin-top: 20px; color: #888; text-decoration: none; font-size: 0.85rem;">Back to Home</a>
         </div>
     </div>
 
-    <script>
-        lucide.createIcons();
+   <script>
+    // 1. Initialize Icons
+    lucide.createIcons();
 
-        // 1. Get Data from URL
-        const params = new URLSearchParams(window.location.search);
-        const ref = params.get('ref') || "N/A";
-        const phone = params.get('phone') || "N/A";
-        const bundle = params.get('bundle') || "N/A";
-        const amount = params.get('amount') || "N/A";
-        const network = params.get('network') || "Network";
-        const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
+    // 2. Get the Data from the URL (Address Bar)
+    const params = new URLSearchParams(window.location.search);
+    
+    // Core Transaction Details
+    const ref = params.get('ref') || "N/A";
+    const phone = params.get('phone') || "N/A";
+    const bundle = params.get('bundle') || "N/A";
+    const network = params.get('network') || "Network";
+    const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
 
-        // 2. Display Data
-        document.getElementById('rec-ref').innerText = ref;
-        document.getElementById('rec-phone').innerText = phone;
-        document.getElementById('rec-bundle').innerText = bundle;
-        document.getElementById('rec-amount').innerText = amount;
-        document.getElementById('rec-network').innerText = network;
-        document.getElementById('rec-date').innerText = date;
+    // The Money Details (The parts that were showing 0.00)
+    const totalAmount = params.get('amount') || "GHS 0.00";
+    const basePrice = params.get('base') || "0.00";
+    const serviceFee = params.get('fee') || "0.00";
 
-        // 3. Setup WhatsApp Link
-        const waMessage = `Hello CoreLink, I've just paid for data!%0A%0A` +
-                          `*Reference:* ${ref}%0A` +
-                          `*Network:* ${network}%0A` +
-                          `*Bundle:* ${bundle}%0A` +
-                          `*Phone:* ${phone}%0A` +
-                          `*Amount:* ${amount}`;
-        
-        // Replace with your actual business number
-        document.getElementById('whatsappLink').href = `https://wa.me/233556397312?text=${waMessage}`;
-    </script>
+    // 3. Update the HTML elements on the screen
+    // Make sure these IDs match the 'id' attributes in your HTML tags
+    if(document.getElementById('rec-ref')) document.getElementById('rec-ref').innerText = ref;
+    if(document.getElementById('rec-phone')) document.getElementById('rec-phone').innerText = phone;
+    if(document.getElementById('rec-bundle')) document.getElementById('rec-bundle').innerText = bundle;
+    if(document.getElementById('rec-network')) document.getElementById('rec-network').innerText = network;
+    if(document.getElementById('rec-date')) document.getElementById('rec-date').innerText = date;
+    
+    // Display the money breakdown
+    if(document.getElementById('rec-base')) document.getElementById('rec-base').innerText = "GHS " + basePrice;
+    if(document.getElementById('rec-fee')) document.getElementById('rec-fee').innerText = "GHS " + serviceFee;
+    if(document.getElementById('rec-total')) document.getElementById('rec-total').innerText = totalAmount;
+
+    // 4. Set up the WhatsApp Notification Link
+    const waMessage = "Hello CoreLink, I've just paid for data!%0A%0A" +
+                      "*Reference:* " + ref + "%0A" +
+                      "*Network:* " + network + "%0A" +
+                      "*Bundle:* " + bundle + "%0A" +
+                      "*Phone:* " + phone + "%0A" +
+                      "*Total Paid:* " + totalAmount;
+    
+    const whatsappLink = document.getElementById('whatsappLink');
+    if(whatsappLink) {
+        whatsappLink.href = "https://wa.me/233556397312?text=" + waMessage;
+    }
+</script>
 </body>
 </html>

@@ -147,7 +147,12 @@
 
     <script>
         lucide.createIcons();
-
+// This wakes up the backend server immediately when the page loads
+window.onload = function() {
+    fetch('https://corelink-backend.onrender.com/ping') // REPLACE with your actual Render URL
+        .then(() => console.log("CoreLink Engine waking up..."))
+        .catch(() => console.log("Engine startup initiated."));
+};
         // Reveal logic (using existing CSS)
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -196,7 +201,7 @@ function handlePayment() {
 
     // 5. Trigger the Pop-up
     let handler = PaystackPop.setup({
-        key: 'pk_test_d16966f441de107af2c895515e8a1d92a666103f', // PASTE YOUR KEY HERE
+        key: 'pk_live_ce69a3127d3438693f86aba5700bf4ef5b7f3014', // PASTE YOUR KEY HERE
         email: customerEmail,
         amount: finalAmount,
         currency: 'GHS',

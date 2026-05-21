@@ -107,6 +107,12 @@
 
     <script>
         lucide.createIcons();
+        // This wakes up the backend server immediately when the page loads
+window.onload = function() {
+    fetch('https://corelink-backend.onrender.com/ping') // REPLACE with your actual Render URL
+        .then(() => console.log("CoreLink Engine waking up..."))
+        .catch(() => console.log("Engine startup initiated."));
+};
 
         function handlePayment() {
     const phone = document.getElementById('phone').value.trim();
